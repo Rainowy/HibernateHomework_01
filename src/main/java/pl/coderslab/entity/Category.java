@@ -2,6 +2,7 @@ package pl.coderslab.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "category")
@@ -17,9 +18,20 @@ public class Category implements Serializable {
 
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "article_id", nullable = false)
-    private Article article;
+    @OneToMany(mappedBy = "category",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
+    )
+    private Set<Article> articles;
+
+    public Category(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Category() {
+    }
 
     public Long getId() {
         return id;
@@ -45,13 +57,12 @@ public class Category implements Serializable {
         this.description = description;
     }
 
-    public Article getArticle() {
-        return article;
+    public Set<Article> getArticles() {
+        return articles;
     }
 
-    public void setArticle(Article article) {
-        this.article = article;
+    public void setArticles(Set<Article> articles) {
+        this.articles = articles;
     }
-
 
 }

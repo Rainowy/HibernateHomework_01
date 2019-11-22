@@ -1,13 +1,8 @@
 package pl.coderslab.entity;
-
-import pl.coderslab.entity.Author;
-import pl.coderslab.entity.Category;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "article")
@@ -28,12 +23,9 @@ public class Article implements Serializable {
     )
     private Author author;
 
-    @OneToMany(mappedBy = "article",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER
-    )
-    private Set<Category> categories;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     @Column(length = 1000)
     private String content;
@@ -42,10 +34,12 @@ public class Article implements Serializable {
     private LocalDateTime createdOn;
     @Column(name = "updated_on")
     private LocalDateTime updatedOn;
+
     @PrePersist
     public void prePersist() {
         createdOn = LocalDateTime.now();
     }
+
     @PreUpdate
     public void preUpdate() {
         updatedOn = LocalDateTime.now();
@@ -75,12 +69,12 @@ public class Article implements Serializable {
         this.id = id;
     }
 
-    public Set<Category> getCategories() {
-        return categories;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getContent() {
@@ -107,20 +101,6 @@ public class Article implements Serializable {
         this.updatedOn = updatedOn;
     }
 
-    @Override
-    public String toString() {
-        return "Article{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", author=" + author +
-                ", categories=" + categories +
-                ", content='" + content + '\'' +
-                ", createdOn=" + createdOn +
-                ", updatedOn=" + updatedOn +
-                '}';
-    }
-
-
     public Article(String title, String content, LocalDateTime createdOn) {
         this.title = title;
         this.content = content;
@@ -129,4 +109,6 @@ public class Article implements Serializable {
 
     public Article() {
     }
+
+
 }

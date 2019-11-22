@@ -33,6 +33,18 @@ public class AbstractJpaDao<T extends Serializable> {
                 .getResultList();
     }
 
+    public T getByName(String name) {
+
+        Query query = entityManager.createQuery("from " + clazz.getName() + " where name =:name");
+
+        query.setParameter("name", name);
+
+        return (T) query.getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
+    }
+
     public void deleteById(long id) {
         entityManager.remove(findOne(id));
     }
@@ -52,35 +64,6 @@ public class AbstractJpaDao<T extends Serializable> {
 
 
     public void delete(T entity) {
-
-    }
-
-
-    public List<Article> findLatestInRange() {
-
-        int range = 3;
-//        return entityManager
-//                .createQuery("SELECT a.title, a.createdOn, SUBSTRING(a.content, 1, 200) FROM Article a ORDER BY a.createdOn DESC")
-//                .setMaxResults(range)
-//                .getResultList();
-
-//        return entityManager
-//                .createQuery("SELECT a.title, a.createdOn, a.content FROM Article a")
-//                .getResultList();
-
-//        entityManager.createQuery("SELECT NEW Article (a.title, a.content) FROM Article a");
-
-//        return  entityManager
-//                .createQuery("SELECT a.content, a.title  FROM Article a",Article.class)
-//                .getResultList();
-
-
-        return entityManager.createQuery(
-                "SELECT NEW Article (a.title," +
-                        " SUBSTRING(a.content,1,200)," +
-                        " a.createdOn) FROM Article a")
-                .setMaxResults(range)
-                .getResultList();
 
     }
 }

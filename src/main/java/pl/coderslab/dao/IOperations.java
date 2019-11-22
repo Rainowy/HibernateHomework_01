@@ -1,6 +1,7 @@
 package pl.coderslab.dao;
 
 import pl.coderslab.entity.Article;
+import pl.coderslab.entity.Category;
 
 import java.io.Serializable;
 import java.util.List;
@@ -22,8 +23,17 @@ public interface IOperations<T extends Serializable> {
 
     List<T> getListByName(String name);
 
+    public T getByName(String name);
+
     /**Article specific methods*/
 
     List<Article> findLatestInRange();
-    }
+
+    /**Category specific methods*/
+
+    List<Category> getNameDescription();
+
+
+
+}
 

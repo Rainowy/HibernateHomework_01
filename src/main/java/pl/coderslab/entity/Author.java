@@ -20,8 +20,6 @@ public class Author implements Serializable {
     @MapsId
     private Article article;
 
-
-
     public Long getId() {
         return id;
     }
