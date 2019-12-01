@@ -45,6 +45,8 @@ public class AbstractJpaDao<T extends Serializable> {
                 .orElse(null);
     }
 
+
+
     public void deleteById(long id) {
         entityManager.remove(findOne(id));
     }

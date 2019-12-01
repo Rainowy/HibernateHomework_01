@@ -1,10 +1,14 @@
 package pl.coderslab.dao;
 
+import pl.coderslab.DTO.ArticleDTO;
+import pl.coderslab.DTO.CategoryDTO;
 import pl.coderslab.entity.Article;
 import pl.coderslab.entity.Category;
 
+import javax.persistence.Tuple;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 
 public interface IOperations<T extends Serializable> {
@@ -29,9 +33,17 @@ public interface IOperations<T extends Serializable> {
 
     List<Article> findLatestInRange();
 
+    List<Article> fetchArticles(String categoryName);
+
+    List<ArticleDTO> fetchArticlesDTO(String categoryName);
+
     /**Category specific methods*/
 
     List<Category> getNameDescription();
+
+    List<CategoryDTO> fetchCategoriesDTO();
+
+    List<Tuple> getCategoriesTuple();
 
 
 

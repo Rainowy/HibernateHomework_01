@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.DTO.ArticleDTO;
 import pl.coderslab.entity.Article;
 import pl.coderslab.entity.Category;
 import pl.coderslab.service.ArticleService;
@@ -23,14 +24,14 @@ public class HomePageController {
     @Autowired
     CategoryService categoryService;
 
-    @GetMapping("/showAll")
+    @GetMapping("/")
 
     public String showAll(Model model) {
 
-        List<Article> articles = articleService.showALl();
-
-        model.addAttribute("articles", articles);
-        model.addAttribute("flag", "showAllArticlesflag");
+//        List<Article> articles = articleService.showALl();
+//
+//        model.addAttribute("articles", articles);
+//        model.addAttribute("flag", "showAllArticlesflag");
 
         return "home";
     }
@@ -53,7 +54,11 @@ public class HomePageController {
 
     public String getCategory(Model model, @RequestParam String category) {
 
-        Set<Article> articlesCat = categoryService.getByName(category);
+//        Set<Article> articlesCat = categoryService.getByName(category); // FindAll Method (Lazy exception problem)
+
+//        List<Article> articlesCat = categoryService.fetchArticles(category); //Fetch JPQL
+
+        List<ArticleDTO> articlesCat = articleService.fetchArticlesDTO(category);
 
         model.addAttribute("articles", articlesCat);
         model.addAttribute("categoryName", category);

@@ -2,9 +2,13 @@ package pl.coderslab.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.coderslab.DTO.ArticleDTO;
+import pl.coderslab.DTO.CategoryDTO;
 import pl.coderslab.dao.IGenericDao;
 import pl.coderslab.entity.Article;
 import pl.coderslab.entity.Category;
+
+import javax.persistence.Tuple;
 import java.util.List;
 import java.util.Set;
 
@@ -26,10 +30,18 @@ public class CategoryService {
 
     }
 
-    public Set<Article> getByName(String name){
+    public List<CategoryDTO> fetchCategoriesDTO(){
 
-        Category byName = dao.getByName(name);
-
-        return byName.getArticles();
+        return dao.fetchCategoriesDTO();
     }
+
+    public List<Tuple> fetchCategoriesTuple(){
+
+        return dao.getCategoriesTuple();
+
+    }
+
+
+
+
 }
