@@ -9,14 +9,15 @@ import java.time.LocalDateTime;
 public class Article implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue()
     private Long id;
 
     @Column(length = 200)
     private String title;
 
     @OneToOne(
-            mappedBy = "article",
+            mappedBy = "article", //relacja jest ustalana przez author
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.LAZY
@@ -45,6 +46,19 @@ public class Article implements Serializable {
         updatedOn = LocalDateTime.now();
     }
 
+    /**Synchro */
+    public void setAuthor(Author author) {
+        if (author == null) {
+            if (this.author != null) {
+                this.author.setArticle(null);
+            }
+        }
+        else {
+            author.setArticle(this);
+        }
+        this.author = author;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -57,9 +71,9 @@ public class Article implements Serializable {
         return author;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
-    }
+//    public void setAuthor(Author author) {
+//        this.author = author;
+//    }
 
     public Long getId() {
         return id;

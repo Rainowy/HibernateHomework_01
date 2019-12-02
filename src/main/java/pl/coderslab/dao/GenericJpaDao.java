@@ -22,13 +22,17 @@ public class GenericJpaDao<T extends Serializable>
      * Article specific methods
      */
 
-    public List<Article> findLatestInRange() {
+    public List<Tuple> findLatestInRange() {
 
         int range = 3;
         return entityManager.createQuery(
-                "SELECT NEW Article (a.title," +
-                        " SUBSTRING(a.content,1,200)," +
-                        " a.createdOn) FROM Article a")
+                "select " +
+                        "a.id as id, " +
+                        "a.title as title, " +
+                        "SUBSTRING(a.content,1,200) as content, " +
+                        "a.createdOn as created, " +
+                        "a.updatedOn as updated " +
+                        "from Article a", Tuple.class)
                 .setMaxResults(range)
                 .getResultList();
     }
@@ -46,29 +50,12 @@ public class GenericJpaDao<T extends Serializable>
                 .getResultList();
 
         return articles;
-
     }
 
     /**
      * DZIAŁA
      */
     public List<ArticleDTO> fetchArticlesDTO(String categoryName) {
-
-//        List articlesDTO = entityManager.createNativeQuery(
-//                "select " +
-//                        " a.id as \"id\", " +
-//                        " a.content as \"content\"," +
-//                        " a.createdOn as \"createdOn\"," +
-//                        " a.title as \"title\"," +
-//                        " c.name as \"name\"," +
-//                        " a.updatedOn as \"updatedOn\"," +
-//                        " from article a " +
-//                        " left join category c " +
-//                        "where c.name = :category", ArticleDTO.class)
-//                .setParameter("category", categoryName)
-//
-//                .getResultList();
-//return articlesDTO;
 
 
         List<ArticleDTO> articlesDTO = entityManager.createQuery(
@@ -83,6 +70,37 @@ public class GenericJpaDao<T extends Serializable>
 
         return articlesDTO;
     }
+
+    public List<Tuple> articlesBasedOnCategory(String categoryName) {
+
+
+       return entityManager.createQuery(
+                "select " +
+                        "a.id as id, " +
+                        "a.title as title, " +
+                        "a.content as content, " +
+                        "a.createdOn as created, " +
+                        "a.updatedOn as updated, " +
+                        "c.name as catName " +
+                        "from Article a " +
+                        "join a.category c " +
+                        "where a.category.name = :category", Tuple.class)
+                .setParameter("category", categoryName)
+                .getResultList();
+
+    }
+//          return entityManager.createQuery(
+//                  "select " +
+//                  "a.id as id, " +
+//                  "a.title as title, " +
+//                  "SUBSTRING(a.content,1,200) as content, " +
+//                  "a.createdOn as created, " +
+//                  "a.updatedOn as updated " +
+//                  "from Article a", Tuple.class)
+//            .setMaxResults(range)
+//                .getResultList();
+//}
+
 
     /**
      * Category specific methods
@@ -106,7 +124,7 @@ public class GenericJpaDao<T extends Serializable>
         return categories;
     }
 
-    public List<Tuple> getCategoriesTuple(){
+    public List<Tuple> getCategoriesTuple() {
 
         List<Tuple> categories = entityManager.createQuery(
                 "select " +

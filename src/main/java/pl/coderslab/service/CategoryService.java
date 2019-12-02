@@ -24,6 +24,10 @@ public class CategoryService {
         dao.setClazz(Category.class);
     }
 
+    public List<Category> findAll(){
+        return dao.findAll();
+    }
+
     public List<Category> getNameDescription() {
 
         return dao.getNameDescription();
@@ -38,6 +42,12 @@ public class CategoryService {
     public List<Tuple> fetchCategoriesTuple(){
 
         return dao.getCategoriesTuple();
+
+    }
+
+    public Category findOne(String id){
+
+        return dao.findOne(Long.parseLong(id));
 
     }
 

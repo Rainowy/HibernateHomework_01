@@ -24,7 +24,7 @@ public class AbstractJpaDao<T extends Serializable> {
 
 
     public T findOne(long id) {
-        return null;
+        return entityManager.find(clazz, id);
     }
 
 
@@ -57,7 +57,15 @@ public class AbstractJpaDao<T extends Serializable> {
     }
 
     public void create(T entity) {
+        entityManager.persist(entity);
 
+
+    }
+
+    public T merge(T entity) {
+        entityManager.merge(entity);
+
+        return entity;
     }
 
     public void update(T entity) {

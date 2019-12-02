@@ -17,6 +17,7 @@ public class Author implements Serializable {
     private String lastName;
 
     @OneToOne(fetch = FetchType.LAZY)
+
     @MapsId
     private Article article;
 
@@ -51,6 +52,7 @@ public class Author implements Serializable {
     public void setArticle(Article article) {
         this.article = article;
     }
+
 
 }
 

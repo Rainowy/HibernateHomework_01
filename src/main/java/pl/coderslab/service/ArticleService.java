@@ -1,15 +1,23 @@
 package pl.coderslab.service;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.coderslab.DTO.ArticleDTO;
 import pl.coderslab.dao.IGenericDao;
 import pl.coderslab.entity.Article;
+import pl.coderslab.entity.Author;
 
+import javax.persistence.Tuple;
+import javax.transaction.Transactional;
 import java.util.List;
 
+@Transactional
 @Service
 public class ArticleService {
+
+    @Autowired
+    AuthorService authorService;
 
     IGenericDao<Article> dao;
 
@@ -23,8 +31,8 @@ public class ArticleService {
 
         return dao.findAll();
     }
-
-    public List<Article> showWithRange() {
+    /** Articles in recent section */
+    public List<Tuple> showWithRange() {
 
         return dao.findLatestInRange();
     }
@@ -47,5 +55,55 @@ public class ArticleService {
         List<ArticleDTO> articlesDTO = dao.fetchArticlesDTO(name);
 
         return articlesDTO;
+    }
+
+    public List<Tuple> articlesBasedOnCategory(String name) {
+
+        return dao.articlesBasedOnCategory(name);
+    }
+
+    public Article merge(Article article) {
+
+        return dao.merge(article);
+    }
+
+    public Article findOne(String id){
+
+        Article articleToFind = dao.findOne(Long.parseLong(id));
+
+        Hibernate.initialize(articleToFind.getCategory());
+
+        return articleToFind;
+    }
+
+    public void updateArticle(Article article){
+
+        dao.update(article);
+    }
+
+
+    public void create(Article article, String authorFirst, String authorLast) {
+
+        if (validateAuthor(authorFirst, authorLast)) {
+
+            Author author = new Author();
+            author.setFirstName(authorFirst);
+            author.setLastName(authorLast);
+            author.setArticle(article);
+
+            article.setAuthor(author);
+            authorService.create(author);
+
+        } else {
+
+            article.setAuthor(null);
+            dao.create(article);
+        }
+    }
+
+    public boolean validateAuthor(String authorFirst, String authorLast) {
+        if (authorFirst.isEmpty()) return false;
+        if (authorLast.isEmpty()) return false;
+        return true;
     }
 }

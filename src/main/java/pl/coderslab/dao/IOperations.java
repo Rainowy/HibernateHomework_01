@@ -19,6 +19,8 @@ public interface IOperations<T extends Serializable> {
 
     void create(final T entity);
 
+    T merge(T entity);
+
     void  update(final T entity);
 
     void delete(final T entity);
@@ -31,11 +33,13 @@ public interface IOperations<T extends Serializable> {
 
     /**Article specific methods*/
 
-    List<Article> findLatestInRange();
+    List<Tuple> findLatestInRange();
 
     List<Article> fetchArticles(String categoryName);
 
     List<ArticleDTO> fetchArticlesDTO(String categoryName);
+
+    List<Tuple> articlesBasedOnCategory(String categoryName);
 
     /**Category specific methods*/
 
@@ -44,6 +48,8 @@ public interface IOperations<T extends Serializable> {
     List<CategoryDTO> fetchCategoriesDTO();
 
     List<Tuple> getCategoriesTuple();
+
+
 
 
 

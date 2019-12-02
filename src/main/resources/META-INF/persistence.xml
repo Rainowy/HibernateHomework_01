@@ -13,8 +13,9 @@
             <property name="javax.persistence.jdbc.password" value="coderslab"/>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
             <property name="javax.persistence.schema-generation.database.action"
-            value="none"/>
-                      <!--value="drop-and-create"/>-->
+                      value="drop-and-create"/>
+            <!--value="none"/>-->
+
             <!--value="none"/>-->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57Dialect"/>
             <property name="hibernate.connection.characterEncoding" value="utf8"/>
@@ -25,6 +26,8 @@
             <property name="hibernate.format_sql" value="true"/>
             <!--<property name="javax.persistence.sql-load-script-source"-->
                       <!--value="META-INF/sql/hibernatehomework_01.sql"/>-->
+            <property name="javax.persistence.sql-load-script-source"
+            value="META-INF/sql/cms.sql"/>
 
             <!-- Execute after create-->
             <!--            <property name="javax.persistence.sql-load-script-source"-->

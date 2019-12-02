@@ -10,6 +10,7 @@ import pl.coderslab.entity.Category;
 import pl.coderslab.service.ArticleService;
 import pl.coderslab.service.CategoryService;
 
+import javax.persistence.Tuple;
 import java.util.List;
 import java.util.Set;
 
@@ -40,7 +41,7 @@ public class HomePageController {
 
     public String showWithRange(Model model) {
 
-        List<Article> articles = articleService.showWithRange();
+        List<Tuple> articles = articleService.showWithRange();
 
         List<Category> categories = categoryService.getNameDescription();
 
