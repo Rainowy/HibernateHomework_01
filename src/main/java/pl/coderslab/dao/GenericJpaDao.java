@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import pl.coderslab.DTO.ArticleDTO;
 import pl.coderslab.DTO.CategoryDTO;
 import pl.coderslab.entity.Article;
+import pl.coderslab.entity.Author;
 import pl.coderslab.entity.Category;
 
 import javax.persistence.Tuple;
@@ -52,11 +53,7 @@ public class GenericJpaDao<T extends Serializable>
         return articles;
     }
 
-    /**
-     * DZIAŁA
-     */
     public List<ArticleDTO> fetchArticlesDTO(String categoryName) {
-
 
         List<ArticleDTO> articlesDTO = entityManager.createQuery(
                 "select new pl.coderslab.DTO.ArticleDTO(" +
@@ -74,7 +71,7 @@ public class GenericJpaDao<T extends Serializable>
     public List<Tuple> articlesBasedOnCategory(String categoryName) {
 
 
-       return entityManager.createQuery(
+        return entityManager.createQuery(
                 "select " +
                         "a.id as id, " +
                         "a.title as title, " +
@@ -87,20 +84,7 @@ public class GenericJpaDao<T extends Serializable>
                         "where a.category.name = :category", Tuple.class)
                 .setParameter("category", categoryName)
                 .getResultList();
-
     }
-//          return entityManager.createQuery(
-//                  "select " +
-//                  "a.id as id, " +
-//                  "a.title as title, " +
-//                  "SUBSTRING(a.content,1,200) as content, " +
-//                  "a.createdOn as created, " +
-//                  "a.updatedOn as updated " +
-//                  "from Article a", Tuple.class)
-//            .setMaxResults(range)
-//                .getResultList();
-//}
-
 
     /**
      * Category specific methods
@@ -134,6 +118,27 @@ public class GenericJpaDao<T extends Serializable>
                 .getResultList();
 
         return categories;
+    }
+
+    /**
+     * Author specific methods
+     */
+
+    public void deleteAuthorBasedOnIdQuery(Long id) {
+
+        entityManager.createQuery("delete from Author a  where a.article.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
+    }
+
+    public void updateAuthorBasedOnIdQuery(Long id, String lastName, String firstName) {
+        entityManager.createQuery("update Author a set              a.firstName = :firstName, " +
+                "a.lastName = :lastName " +
+                "where a.article.id = :id")
+                .setParameter("id", id)
+                .setParameter("firstName", firstName)
+                .setParameter("lastName", lastName)
+                .executeUpdate();
     }
 }
 

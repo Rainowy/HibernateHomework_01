@@ -64,5 +64,4 @@ public class Category implements Serializable {
     public void setArticles(Set<Article> articles) {
         this.articles = articles;
     }
-
 }

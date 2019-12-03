@@ -29,10 +29,7 @@
                 Content: ${article.get('content')},
                 Data aktualizacji: ${article.get('updated')}
                 <a href="<c:url value="/article/edit/${article.get('id')}" />">Edytuj</a>,
-                <a href="<c:url value="/books/delete/${book.get('id')}" />">Kasuj</a>
-
-                    <%--<button type="button" id="submit2" value="${article.getTitle()}" style="font-size: 16px;">Edit Article</button>--%>
-                    <%--<button type="button" id="submit3" style="font-size: 16px;">Delete Article</button>--%>
+                <a href="<c:url value="/article/delete/${article.get('id')}" />">Kasuj</a>
             </li>
         </ul>
     </c:forEach>
@@ -52,9 +49,7 @@
     document.getElementById('submit1').addEventListener('click', () => location.href = "/article/add")
     document.getElementById('submit').addEventListener('click', () =>
         location.href = "/article/" + (document.getElementById('select').value))
-    // document.getElementById('submit2').addEventListener('click', () => location.href = "/article/edit/" +(document.getElementById('submit2').value) )
-    //
-    // document.getElementById('submit3').addEventListener('click', () => location.href = "/category/")
+
 </script>
 
 <c:if test="${not empty article}">
@@ -68,20 +63,39 @@
             <c:set var="formAction" value="/article/postAdd"/>
             <h2>Add article</h2>
         </c:otherwise>
-
     </c:choose>
     <form:form method="post" action="${formAction}" modelAttribute="article">
+        <form:hidden path="id" value="${article.getId()}"/>
         <p>Title<form:input path="title"></form:input></p>
         <p>Description<form:input path="content"></form:input></p>
-        <p>Author FirstName<input type="text" name="firstName"></p>
-        <p>Author LastName<input type="text" name="lastName"></p>
+
+        <c:choose>
+            <c:when test="${not empty edit}">
+                <h3>If names stays blank, author won't be updated</h3>
+                <p>Author FirstName<input type="text" name="firstName" value="${article.getAuthor().getFirstName()}">
+                </p>
+                <p>Author LastName<input type="text" name="lastName" value="${article.getAuthor().getLastName()}"></p>
+            </c:when>
+            <c:otherwise>
+                <h3>If names stays blank, author won't be created</h3>
+                <p>Author FirstName<input type="text" name="firstName"></p>
+                <p>Author LastName<input type="text" name="lastName"></p>
+            </c:otherwise>
+        </c:choose>
         <form:select path="category">
-            <form:option value="0" label="Choose category" selected="true" disabled="true"/>
+            <c:choose>
+                <c:when test="${not empty edit}">
+                    <form:option value="0" label="Current (${article.getCategory().getName()})" selected="true"
+                                 disabled="true"/>
+                </c:when>
+                <c:otherwise>
+                    <form:option value="0" label="Choose category" selected="true" disabled="true"/>
+                </c:otherwise>
+            </c:choose>
             <form:options items="${categoriesEntity}" itemValue="id" itemLabel="name"/>
         </form:select>
         <p><input type="submit" value="Register"></p>
     </form:form>
 </c:if>
-
 </body>
 </html>

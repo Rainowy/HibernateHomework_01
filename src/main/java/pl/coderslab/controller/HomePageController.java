@@ -27,12 +27,7 @@ public class HomePageController {
 
     @GetMapping("/")
 
-    public String showAll(Model model) {
-
-//        List<Article> articles = articleService.showALl();
-//
-//        model.addAttribute("articles", articles);
-//        model.addAttribute("flag", "showAllArticlesflag");
+    public String showAll() {
 
         return "home";
     }

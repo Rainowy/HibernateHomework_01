@@ -31,7 +31,10 @@ public class ArticleService {
 
         return dao.findAll();
     }
-    /** Articles in recent section */
+
+    /**
+     * Articles in recent section
+     */
     public List<Tuple> showWithRange() {
 
         return dao.findLatestInRange();
@@ -67,7 +70,7 @@ public class ArticleService {
         return dao.merge(article);
     }
 
-    public Article findOne(String id){
+    public Article findOne(String id) {
 
         Article articleToFind = dao.findOne(Long.parseLong(id));
 
@@ -76,11 +79,16 @@ public class ArticleService {
         return articleToFind;
     }
 
-    public void updateArticle(Article article){
+    public void updateArticle(Article article, String authorFirst, String authorLast) {
 
-        dao.update(article);
+        if (validateAuthor(authorFirst, authorLast)) {
+            dao.updateAuthorBasedOnIdQuery(article.getId(), authorFirst, authorLast);
+
+        } else {
+            dao.deleteAuthorBasedOnIdQuery(article.getId());
+            dao.update(article);
+        }
     }
-
 
     public void create(Article article, String authorFirst, String authorLast) {
 
@@ -99,6 +107,11 @@ public class ArticleService {
             article.setAuthor(null);
             dao.create(article);
         }
+    }
+
+    public void delete(String id) {
+
+        dao.delete(findOne(id));
     }
 
     public boolean validateAuthor(String authorFirst, String authorLast) {

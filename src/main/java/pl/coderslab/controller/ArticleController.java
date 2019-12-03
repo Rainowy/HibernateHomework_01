@@ -1,10 +1,8 @@
 package pl.coderslab.controller;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.coderslab.DTO.ArticleDTO;
 import pl.coderslab.entity.Article;
 import pl.coderslab.entity.Author;
 import pl.coderslab.entity.Category;
@@ -56,8 +54,6 @@ public class ArticleController {
 
     public String getCategory(Model model, @PathVariable String category) {
 
-//        List<ArticleDTO> articlesCat = articleService.fetchArticlesDTO(category);
-
         List<Tuple> articlesCat = articleService.articlesBasedOnCategory(category);
 
         model.addAttribute("articles", articlesCat);
@@ -65,6 +61,7 @@ public class ArticleController {
 
         return "article";
     }
+
     @GetMapping("/add")
 
     public String addArticle(Model model) {
@@ -76,8 +73,8 @@ public class ArticleController {
 
     @PostMapping("/postAdd")
     public String postAddArticle(@RequestParam String firstName,
-                              String lastName,
-                              @ModelAttribute Article article) {
+                                 String lastName,
+                                 @ModelAttribute Article article) {
 
         /** WAŻNE !!! NIE TRZEBA OSOBNO ZAPISYWAĆ ARTYKUŁU PRZED ZAPISANIEM AUTORA, WYSTARCZY NOWY OBIEKT ARTYKUŁ DODAĆ DO NOWO TWORZONEGO AUTORA **/
 
@@ -87,26 +84,24 @@ public class ArticleController {
     }
 
     @GetMapping("/edit/{id}")
-//    @ResponseBody
     public String editArticle(@PathVariable String id,
-                              Model model){
-
-        System.out.println("ID TOTOTO " + id);
+                              Model model) {
 
         Article articleToEdit = articleService.findOne(id);
 
-        model.addAttribute("article",articleToEdit);
-        model.addAttribute("edit","editActionFormFLag");
+        model.addAttribute("article", articleToEdit);
+        model.addAttribute("edit", "editActionFormFLag");
 
         return "article";
-//        return null;
     }
 
     @PostMapping("/postEdit")
-    public String postEditArticle(@ModelAttribute Article article,
-                                  Model model){
+    public String postEditArticle(@RequestParam String firstName,
+                                  String lastName,
+                                  @ModelAttribute Article article,
+                                  Model model) {
 
-        articleService.updateArticle(article);
+        articleService.updateArticle(article, firstName, lastName);
 
         List<Tuple> recentArticles = articleService.showWithRange();
 
@@ -114,6 +109,30 @@ public class ArticleController {
 
         return "article";
 
-        //todo DODAĆ HIDDEN ID W JSP W EDIT ŻEBY UPDATE DZIAŁĄŁO
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteArticle(@PathVariable String id,
+                                Model model) {
+
+        Article articleToDelete = articleService.findOne(id);
+
+        model.addAttribute("article", articleToDelete);
+
+        return "deleteArticle";
+
+    }
+
+    @PostMapping("/delete")
+    public String postDeleteArticle(@RequestParam String del,
+                                    @RequestParam String id) {
+        switch (del) {
+            case "yes":
+
+                authorService.delete(id);
+
+                articleService.delete(id);
+        }
+        return "redirect:/article/";
     }
 }

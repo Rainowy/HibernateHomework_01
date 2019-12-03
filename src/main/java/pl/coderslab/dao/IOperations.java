@@ -8,8 +8,6 @@ import pl.coderslab.entity.Category;
 import javax.persistence.Tuple;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
-
 
 public interface IOperations<T extends Serializable> {
 
@@ -48,6 +46,12 @@ public interface IOperations<T extends Serializable> {
     List<CategoryDTO> fetchCategoriesDTO();
 
     List<Tuple> getCategoriesTuple();
+
+    /**Author specific methods*/
+
+    void deleteAuthorBasedOnIdQuery(Long id);
+
+    void updateAuthorBasedOnIdQuery(Long id, String lastName, String firstName);
 
 
 

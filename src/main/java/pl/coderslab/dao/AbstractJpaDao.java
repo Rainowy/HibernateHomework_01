@@ -27,7 +27,6 @@ public class AbstractJpaDao<T extends Serializable> {
         return entityManager.find(clazz, id);
     }
 
-
     public List<T> findAll() {
         return entityManager.createQuery("from " + clazz.getName())
                 .getResultList();
@@ -45,8 +44,6 @@ public class AbstractJpaDao<T extends Serializable> {
                 .orElse(null);
     }
 
-
-
     public void deleteById(long id) {
         entityManager.remove(findOne(id));
     }
@@ -58,7 +55,6 @@ public class AbstractJpaDao<T extends Serializable> {
 
     public void create(T entity) {
         entityManager.persist(entity);
-
 
     }
 
@@ -72,8 +68,9 @@ public class AbstractJpaDao<T extends Serializable> {
         entityManager.merge(entity);
     }
 
-
     public void delete(T entity) {
-
+        entityManager.remove(entityManager.contains(entity) ?
+                entity : entityManager.merge(entity));
+        entityManager.remove(entity);
     }
 }

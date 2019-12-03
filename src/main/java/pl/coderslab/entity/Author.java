@@ -52,7 +52,5 @@ public class Author implements Serializable {
     public void setArticle(Article article) {
         this.article = article;
     }
-
-
 }
 

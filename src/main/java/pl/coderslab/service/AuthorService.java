@@ -1,11 +1,8 @@
 package pl.coderslab.service;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.coderslab.dao.IGenericDao;
-import pl.coderslab.entity.Article;
 import pl.coderslab.entity.Author;
-import pl.coderslab.entity.Category;
 
 import java.util.List;
 
@@ -32,5 +29,10 @@ public class AuthorService {
 
     public void create(Author author){
         dao.create(author);
+    }
+
+    public void delete(String id){
+
+        dao.deleteAuthorBasedOnIdQuery(Long.parseLong(id));
     }
 }

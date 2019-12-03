@@ -1,4 +1,7 @@
 package pl.coderslab.entity;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -22,6 +25,7 @@ public class Article implements Serializable {
             orphanRemoval = true,
             fetch = FetchType.LAZY
     )
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     private Author author;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -71,9 +75,6 @@ public class Article implements Serializable {
         return author;
     }
 
-//    public void setAuthor(Author author) {
-//        this.author = author;
-//    }
 
     public Long getId() {
         return id;
@@ -123,6 +124,4 @@ public class Article implements Serializable {
 
     public Article() {
     }
-
-
 }

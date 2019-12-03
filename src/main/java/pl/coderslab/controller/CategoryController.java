@@ -33,23 +33,8 @@ public class CategoryController {
     }
 
     @GetMapping("/showAll")
-    public String showAllCategories(Model model) {
-
-//        List<CategoryDTO> categoriesDTO = categoryService.fetchCategoriesDTO(); //DTO z użyciem dodatkowej klasy
+    public String showAllCategories() {
 
         return "category";
-
     }
-
-//    @GetMapping("/{category}")
-//
-//    public String getCategory(Model model, @PathVariable String category){
-//
-//        List<ArticleDTO> articlesCat = articleService.fetchArticlesDTO(category);
-//
-//        model.addAttribute("articles", articlesCat);
-//        model.addAttribute("categoryName", category);
-//
-//        return "article";
-//    }
 }
