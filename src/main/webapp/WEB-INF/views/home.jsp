@@ -11,11 +11,10 @@
 <button type="button" id="submit1" style="font-size: 20px;">Articles</button>
 <button type="button" id="submit2" style="font-size: 20px;">Categories</button>
 <button type="button" id="submit3" style="font-size: 20px;">Authors</button>
-<%--<button type="button" id="submit4" style="font-size: 20px;">Submit</button>--%>
 <script>
     document.getElementById('submit1').addEventListener('click', () => location.href = "/article/")
     document.getElementById('submit2').addEventListener('click', () => location.href = "/category/")
-    document.getElementById('submit3').addEventListener('click', () => location.href = "/category/")
+    document.getElementById('submit3').addEventListener('click', () => location.href = "/author/")
 </script>
 
 <%--<c:if test="${not empty articles}">--%>

@@ -2,6 +2,7 @@ package pl.coderslab.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.entity.Article;
 import pl.coderslab.entity.Author;
@@ -11,6 +12,7 @@ import pl.coderslab.service.AuthorService;
 import pl.coderslab.service.CategoryService;
 
 import javax.persistence.Tuple;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -68,15 +70,21 @@ public class ArticleController {
 
         model.addAttribute("article", new Article());
 
+        model.addAttribute("formAction", "/article/postAdd");
+
         return "article";
     }
 
     @PostMapping("/postAdd")
     public String postAddArticle(@RequestParam String firstName,
                                  String lastName,
-                                 @ModelAttribute Article article) {
+                                 @Valid Article article, BindingResult result) {
 
         /** WAŻNE !!! NIE TRZEBA OSOBNO ZAPISYWAĆ ARTYKUŁU PRZED ZAPISANIEM AUTORA, WYSTARCZY NOWY OBIEKT ARTYKUŁ DODAĆ DO NOWO TWORZONEGO AUTORA **/
+
+        if(result.hasErrors()){
+            return "article";
+        }
 
         articleService.create(article, firstName, lastName);
 
@@ -98,8 +106,14 @@ public class ArticleController {
     @PostMapping("/postEdit")
     public String postEditArticle(@RequestParam String firstName,
                                   String lastName,
-                                  @ModelAttribute Article article,
+                                  @Valid Article article,BindingResult result,
                                   Model model) {
+
+        if(result.hasErrors()){
+            model.addAttribute("edit", "editActionFormFLag");
+            return "article";
+        }
+
 
         articleService.updateArticle(article, firstName, lastName);
 
@@ -129,7 +143,7 @@ public class ArticleController {
         switch (del) {
             case "yes":
 
-                authorService.delete(id);
+//                authorService.delete(id);
 
                 articleService.delete(id);
         }

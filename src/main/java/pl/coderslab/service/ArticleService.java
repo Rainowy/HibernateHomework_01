@@ -7,6 +7,7 @@ import pl.coderslab.DTO.ArticleDTO;
 import pl.coderslab.dao.IGenericDao;
 import pl.coderslab.entity.Article;
 import pl.coderslab.entity.Author;
+import pl.coderslab.entity.Category;
 
 import javax.persistence.Tuple;
 import javax.transaction.Transactional;
@@ -18,6 +19,9 @@ public class ArticleService {
 
     @Autowired
     AuthorService authorService;
+
+    @Autowired
+    CategoryService categoryService;
 
     IGenericDao<Article> dao;
 
@@ -65,11 +69,6 @@ public class ArticleService {
         return dao.articlesBasedOnCategory(name);
     }
 
-    public Article merge(Article article) {
-
-        return dao.merge(article);
-    }
-
     public Article findOne(String id) {
 
         Article articleToFind = dao.findOne(Long.parseLong(id));
@@ -99,19 +98,30 @@ public class ArticleService {
             author.setLastName(authorLast);
             author.setArticle(article);
 
-            article.setAuthor(author);
             authorService.create(author);
+            article.setAuthor(author); /** synchro */
+
+            Long categoryId = article.getCategory().getId();
+            Category singleCategory = categoryService.getSingleCategory(categoryId);
+            singleCategory.addArticle(article); /** synchro */
+
 
         } else {
 
-            article.setAuthor(null);
+            article.setAuthor(null); /** synchro */
             dao.create(article);
         }
     }
 
     public void delete(String id) {
 
-        dao.delete(findOne(id));
+        Article toDelete = dao.findOne(Long.parseLong(id));
+
+        toDelete.getCategory().removeArticle(toDelete); /** synchro */
+        toDelete.setAuthor(null); /** synchro */
+
+        /** v bezpośrednie kasowanie artykułu niepotrzebne bo kasuje metoda synchronizująca wyżej(category) */
+//        dao.delete(toDelete);
     }
 
     public boolean validateAuthor(String authorFirst, String authorLast) {

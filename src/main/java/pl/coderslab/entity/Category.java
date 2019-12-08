@@ -1,9 +1,16 @@
 package pl.coderslab.entity;
 
+import org.hibernate.Hibernate;
+
 import javax.persistence.*;
+import javax.transaction.Transactional;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
+@Transactional
 @Entity
 @Table(name = "category")
 public class Category implements Serializable {
@@ -12,18 +19,30 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Size(min=5)
     @Column(length = 100)
     private String name;
 
 
     private String description;
 
+    /** Działa kasowanie kaskadowe */
     @OneToMany(mappedBy = "category",
             cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
+            orphanRemoval = true
     )
-    private Set<Article> articles;
+
+    private List<Article> articles = new ArrayList<>();
+
+    public void addArticle(Article article) {
+        articles.add(article);
+        article.setCategory(this);
+    }
+
+    public void removeArticle(Article article){
+        articles.remove(article);
+        article.setCategory(null);
+    }
 
     public Category(String name, String description) {
         this.name = name;
@@ -57,11 +76,11 @@ public class Category implements Serializable {
         this.description = description;
     }
 
-    public Set<Article> getArticles() {
+    public List<Article> getArticles() {
         return articles;
     }
 
-    public void setArticles(Set<Article> articles) {
+    public void setArticles(List<Article> articles) {
         this.articles = articles;
     }
 }

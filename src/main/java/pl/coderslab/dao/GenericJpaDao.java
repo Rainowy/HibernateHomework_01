@@ -9,6 +9,7 @@ import pl.coderslab.entity.Article;
 import pl.coderslab.entity.Author;
 import pl.coderslab.entity.Category;
 
+import javax.persistence.Query;
 import javax.persistence.Tuple;
 import java.io.Serializable;
 import java.util.List;
@@ -120,6 +121,20 @@ public class GenericJpaDao<T extends Serializable>
         return categories;
     }
 
+    public Category getSingleCategory(Long id) {
+
+//        Author a = entityManager.createQuery("SELECT a FROM Author a left JOIN FETCH a.books  WHERE a.id = 1", Author.class).getSingleResult();
+
+        return entityManager.createQuery(
+                "select c from Category c " +
+                        "join fetch c.articles " +
+                        "where c.id = :id", Category.class)
+                .setParameter("id", id)
+                .getSingleResult();
+
+
+    }
+
     /**
      * Author specific methods
      */
@@ -139,6 +154,16 @@ public class GenericJpaDao<T extends Serializable>
                 .setParameter("firstName", firstName)
                 .setParameter("lastName", lastName)
                 .executeUpdate();
+    }
+
+    public List<Tuple> showAllAuthorsQuery() {
+
+        return entityManager.createQuery("select " +
+                "a.id as id, " +
+                "a.firstName as firstName, " +
+                "a.lastName as lastName " +
+                "from Author a", Tuple.class)
+                .getResultList();
     }
 }
 

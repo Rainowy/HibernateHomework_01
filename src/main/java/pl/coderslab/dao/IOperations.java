@@ -29,6 +29,8 @@ public interface IOperations<T extends Serializable> {
 
     public T getByName(String name);
 
+    T saveAndReturnEntity(T entity);
+
     /**Article specific methods*/
 
     List<Tuple> findLatestInRange();
@@ -47,11 +49,17 @@ public interface IOperations<T extends Serializable> {
 
     List<Tuple> getCategoriesTuple();
 
+    Category getSingleCategory(Long id);
+
     /**Author specific methods*/
 
     void deleteAuthorBasedOnIdQuery(Long id);
 
     void updateAuthorBasedOnIdQuery(Long id, String lastName, String firstName);
+
+    List<Tuple> showAllAuthorsQuery();
+
+
 
 
 

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import pl.coderslab.dao.IGenericDao;
 import pl.coderslab.entity.Author;
 
+import javax.persistence.Tuple;
 import java.util.List;
 
 @Service
@@ -34,5 +35,10 @@ public class AuthorService {
     public void delete(String id){
 
         dao.deleteAuthorBasedOnIdQuery(Long.parseLong(id));
+    }
+
+    public List<Tuple> showAllAuthors(){
+
+        return dao.showAllAuthorsQuery();
     }
 }

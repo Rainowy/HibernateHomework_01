@@ -58,6 +58,12 @@ public class AbstractJpaDao<T extends Serializable> {
 
     }
 
+    public T saveAndReturnEntity(T entity){
+        entityManager.persist(entity);
+
+        return entity;
+    }
+
     public T merge(T entity) {
         entityManager.merge(entity);
 
@@ -68,9 +74,11 @@ public class AbstractJpaDao<T extends Serializable> {
         entityManager.merge(entity);
     }
 
+
     public void delete(T entity) {
         entityManager.remove(entityManager.contains(entity) ?
                 entity : entityManager.merge(entity));
-        entityManager.remove(entity);
+//        merge(entity);
+//        entityManager.remove(entity);
     }
 }

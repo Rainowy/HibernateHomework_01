@@ -19,6 +19,11 @@ public class CategoryService {
         dao.setClazz(Category.class);
     }
 
+    public Category saveAndReturn(Category category){
+
+        return dao.saveAndReturnEntity(category);
+    }
+
     public List<Category> findAll(){
         return dao.findAll();
     }
@@ -42,5 +47,17 @@ public class CategoryService {
     public Category findOne(String id){
 
         return dao.findOne(Long.parseLong(id));
+    }
+
+    public void delete(String id){
+
+        Category toDelete = dao.findOne(Long.parseLong(id));
+
+        dao.delete(toDelete);
+    }
+
+    public Category getSingleCategory(Long id){
+
+        return dao.getSingleCategory(id);
     }
 }

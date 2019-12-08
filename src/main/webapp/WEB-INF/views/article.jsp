@@ -60,14 +60,24 @@
             <h2>Update article</h2>
         </c:when>
         <c:otherwise>
-            <c:set var="formAction" value="/article/postAdd"/>
+            <%--<c:set var="formAction" value="/article/postAdd"/>--%>
             <h2>Add article</h2>
         </c:otherwise>
     </c:choose>
+    <c:if test="${article.draft == false}">
+        <h3>ARTICLE DETAILS - all fields mandatory</h3>
+    </c:if>
+    <c:if test="${article.draft == true}">
+        <h3>ARTICLE PROPOSAL DETAILS - title and description mandatory</h3>
+    </c:if>
     <form:form method="post" action="${formAction}" modelAttribute="article">
+
         <form:hidden path="id" value="${article.getId()}"/>
+        <form:hidden path="draft"></form:hidden>
         <p>Title<form:input path="title"></form:input></p>
+        <p><form:errors path="title" cssClass="error" /></p>
         <p>Description<form:input path="content"></form:input></p>
+        <p><form:errors path="content" cssClass="error" /></p>
 
         <c:choose>
             <c:when test="${not empty edit}">
@@ -94,6 +104,7 @@
             </c:choose>
             <form:options items="${categoriesEntity}" itemValue="id" itemLabel="name"/>
         </form:select>
+        <p><form:errors path="category" cssClass="error" /></p>
         <p><input type="submit" value="Register"></p>
     </form:form>
 </c:if>

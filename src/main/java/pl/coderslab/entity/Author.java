@@ -1,5 +1,7 @@
 package pl.coderslab.entity;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -12,8 +14,10 @@ public class Author implements Serializable {
 
     private Long id;
 
+    @NotEmpty
     private String firstName;
 
+    @NotEmpty
     private String lastName;
 
     @OneToOne(fetch = FetchType.LAZY)

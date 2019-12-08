@@ -1,8 +1,14 @@
 package pl.coderslab.entity;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.NotEmpty;
+import pl.coderslab.validation.CatRequired;
+import pl.coderslab.validation.DraftArticle;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -11,11 +17,15 @@ import java.time.LocalDateTime;
 @Table(name = "article")
 public class Article implements Serializable {
 
+
+
     @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @GeneratedValue()
     private Long id;
 
+    @NotEmpty(groups = DraftArticle.class)
+    @Size(max = 200,groups = DraftArticle.class)
     @Column(length = 200)
     private String title;
 
@@ -25,13 +35,16 @@ public class Article implements Serializable {
             orphanRemoval = true,
             fetch = FetchType.LAZY
     )
-//    @OnDelete(action = OnDeleteAction.CASCADE)
     private Author author;
 
+
+    @CatRequired(groups = DraftArticle.class)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     private Category category;
 
+    @NotEmpty(groups = DraftArticle.class)
+    @Size(max = 500, groups = DraftArticle.class)
     @Column(length = 1000)
     private String content;
 
@@ -39,6 +52,33 @@ public class Article implements Serializable {
     private LocalDateTime createdOn;
     @Column(name = "updated_on")
     private LocalDateTime updatedOn;
+
+    private boolean draft;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+
+        if (!(o instanceof Article))
+            return false;
+
+        return
+                id != null &&
+                        id.equals(((Article) o).getId());
+    }
+    @Override
+    public int hashCode() {
+        return 31;
+    }
+
+    public boolean isDraft() {
+        return draft;
+    }
+
+    public void setDraft(boolean draft) {
+        this.draft = draft;
+    }
 
     @PrePersist
     public void prePersist() {
@@ -50,14 +90,15 @@ public class Article implements Serializable {
         updatedOn = LocalDateTime.now();
     }
 
-    /**Synchro */
+    /**
+     * Synchro
+     */
     public void setAuthor(Author author) {
         if (author == null) {
             if (this.author != null) {
                 this.author.setArticle(null);
             }
-        }
-        else {
+        } else {
             author.setArticle(this);
         }
         this.author = author;
@@ -123,5 +164,19 @@ public class Article implements Serializable {
     }
 
     public Article() {
+    }
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author=" + author +
+                ", category=" + category +
+                ", content='" + content + '\'' +
+                ", createdOn=" + createdOn +
+                ", updatedOn=" + updatedOn +
+                ", draft=" + draft +
+                '}';
     }
 }

@@ -1,18 +1,15 @@
 package pl.coderslab.controller;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.DTO.ArticleDTO;
-import pl.coderslab.entity.Article;
 import pl.coderslab.entity.Category;
 import pl.coderslab.service.ArticleService;
 import pl.coderslab.service.CategoryService;
-
 import javax.persistence.Tuple;
 import java.util.List;
-import java.util.Set;
+
 
 @Controller
 @RequestMapping("/home")
